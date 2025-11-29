@@ -3,485 +3,604 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trustyfy Corporate Wallet Architecture</title>
+    <title>Trustyfy Corporate Accounts Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @media print {
-            body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-            .page-break { page-break-before: always; }
-        }
         body { font-family: system-ui, -apple-system, sans-serif; }
+        .sidebar { position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; }
+        .content { margin-left: 300px; }
+        .menu-item { cursor: pointer; transition: all 0.2s; }
+        .menu-item:hover { background-color: #e0f2fe; transform: translateX(5px); }
+        .menu-item.active { background-color: #0ea5e9; color: white; font-weight: bold; }
+        .section-content { display: none; }
+        .section-content.active { display: block; }
+        @media (max-width: 768px) {
+            .sidebar { position: relative; width: 100%; height: auto; }
+            .content { margin-left: 0; }
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-slate-50 to-slate-100 p-8">
-    <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-2xl p-8">
+<body class="bg-gray-50">
+    
+    <!-- Sidebar Navigation -->
+    <div class="sidebar w-72 bg-white border-r border-gray-200 shadow-lg">
+        <div class="p-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+            <h1 class="text-xl font-bold">🏦 Trustyfy Corporate</h1>
+            <p class="text-sm text-blue-100 mt-1">Documentation</p>
+        </div>
         
-        <!-- Header -->
-        <div class="text-center mb-8 pb-6 border-b-4 border-blue-600">
-            <h1 class="text-4xl font-bold text-gray-900 mb-2">
-                🏛️ Trustyfy Corporate Wallet Architecture
-            </h1>
-            <p class="text-lg text-gray-600">Master Document for Sales & Support Teams</p>
-            <p class="text-sm text-gray-500 mt-2">The Glass Vault: Where Simplicity Meets Security</p>
-        </div>
-
-        <!-- The Golden Rule -->
-        <div class="bg-gradient-to-r from-red-100 to-red-50 border-4 border-red-500 rounded-xl p-6 mb-8">
-            <div class="flex items-center justify-center gap-3 mb-3">
-                <svg class="w-10 h-10 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                </svg>
-                <h2 class="text-2xl font-bold text-red-900">🛑 THE GOLDEN RULE</h2>
+        <nav class="p-4">
+            <div class="mb-2">
+                <div class="menu-item active px-4 py-2 rounded-lg text-sm" onclick="showSection('intro')">
+                    <span class="font-semibold">1.</span> Introduction
+                </div>
+                <div class="ml-4 text-xs text-gray-600 mt-1">
+                    <div class="menu-item px-3 py-1 rounded" onclick="showSection('intro')">1.1 What is a Corporate account</div>
+                    <div class="menu-item px-3 py-1 rounded" onclick="showSection('intro')">1.2 Main components</div>
+                    <div class="menu-item px-3 py-1 rounded" onclick="showSection('intro')">1.3 Team roles</div>
+                    <div class="menu-item px-3 py-1 rounded" onclick="showSection('intro')">1.4 Operational flow</div>
+                </div>
             </div>
-            <p class="text-center text-red-800 font-bold text-xl mb-2">
-                The Trustyfy Corporate Wallet (Gnosis Safe) DOES NOT have a private key
-            </p>
-            <p class="text-center text-red-700 text-lg">
-                It has RULES. The private keys are held by the signers and secured by Magic.link.
-            </p>
-        </div>
 
-        <!-- Approval Policy -->
-        <div class="bg-gradient-to-r from-purple-100 to-purple-50 border-4 border-purple-400 rounded-xl p-6 mb-8">
-            <div class="flex items-center justify-center gap-3 mb-3">
-                <svg class="w-8 h-8 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                </svg>
-                <h2 class="text-2xl font-bold text-purple-900">APPROVAL POLICY: 2/3 MULTISIG</h2>
+            <div class="menu-item px-4 py-2 rounded-lg text-sm" onclick="showSection('creation')">
+                <span class="font-semibold">2.</span> Creating an Account
             </div>
-            <p class="text-center text-purple-800 font-semibold text-lg">
-                2 out of 3 signers must approve any transaction before funds move
-            </p>
-        </div>
 
-        <!-- The Signers -->
-        <div class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4 text-center">👥 THE SIGNERS (Company Owners)</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                <!-- Signer 1 - Alice -->
-                <div class="border-4 border-blue-500 rounded-xl p-6 bg-blue-50">
-                    <div class="flex items-center gap-2 mb-4 pb-3 border-b-2 border-blue-300">
-                        <svg class="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        </svg>
-                        <h3 class="text-xl font-bold text-blue-900">SIGNER 1: Alice</h3>
-                    </div>
-                    
-                    <div class="bg-white rounded-lg p-4 mb-4 border-2 border-blue-300">
-                        <div class="flex items-center gap-2 mb-2">
-                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                            </svg>
-                            <p class="font-bold text-blue-900">Trustyfy Native Wallet</p>
-                        </div>
-                        <p class="text-xs text-gray-600 mb-2">(Magic.link)</p>
-                        <p class="text-sm text-gray-700 mb-2">alice@company.com</p>
-                        <div class="bg-blue-100 p-2 rounded text-xs font-mono break-all">
-                            0x1a2b...3c4d
-                        </div>
-                    </div>
+            <div class="menu-item px-4 py-2 rounded-lg text-sm" onclick="showSection('kyb')">
+                <span class="font-semibold">3.</span> KYB Onboarding
+            </div>
 
-                    <div class="bg-green-100 border-2 border-green-500 rounded-lg p-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                            </svg>
-                            <p class="font-bold text-green-900">Private Key Location</p>
+            <div class="menu-item px-4 py-2 rounded-lg text-sm" onclick="showSection('wallets')">
+                <span class="font-semibold">4.</span> Smart Wallets
+            </div>
+
+            <div class="menu-item px-4 py-2 rounded-lg text-sm" onclick="showSection('multisig')">
+                <span class="font-semibold">5.</span> Multisig & Policies
+            </div>
+
+            <div class="menu-item px-4 py-2 rounded-lg text-sm" onclick="showSection('fiat')">
+                <span class="font-semibold">6.</span> Fiat Bank Accounts
+            </div>
+
+            <div class="menu-item px-4 py-2 rounded-lg text-sm" onclick="showSection('ramps')">
+                <span class="font-semibold">7.</span> On-ramp & Off-ramp
+            </div>
+
+            <div class="menu-item px-4 py-2 rounded-lg text-sm" onclick="showSection('team')">
+                <span class="font-semibold">8.</span> Team Management
+            </div>
+
+            <div class="menu-item px-4 py-2 rounded-lg text-sm" onclick="showSection('operations')">
+                <span class="font-semibold">9.</span> Daily Operations
+            </div>
+
+            <div class="menu-item px-4 py-2 rounded-lg text-sm" onclick="showSection('advanced')">
+                <span class="font-semibold">10.</span> Advanced Use Cases
+            </div>
+
+            <div class="menu-item px-4 py-2 rounded-lg text-sm" onclick="showSection('faq')">
+                <span class="font-semibold">11.</span> FAQ
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content p-8">
+        
+        <!-- Section 1: Introduction -->
+        <div id="intro" class="section-content active">
+            <div class="max-w-5xl">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6 pb-4 border-b-4 border-blue-600">
+                    1. Introduction
+                </h1>
+
+                <!-- 1.1 What is a Corporate Account -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">1.1 What is a Corporate Account?</h2>
+                    <div class="bg-white rounded-xl shadow-lg p-8 border-l-4 border-blue-500">
+                        <p class="text-lg text-gray-700 mb-4 leading-relaxed">
+                            A Trustyfy Corporate Account is an <strong>enterprise-grade financial platform</strong> that combines traditional banking with blockchain technology, designed specifically for businesses that need to manage both fiat currencies and cryptocurrencies.
+                        </p>
+                        <p class="text-gray-700 mb-6">
+                            Unlike traditional bank accounts or basic crypto wallets, a Corporate Account provides:
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-4 mb-6">
+                            <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                    </svg>
+                                    <h3 class="font-bold text-blue-900">Multi-signature Security</h3>
+                                </div>
+                                <p class="text-sm text-gray-700">Built-in approval workflows requiring multiple team members to authorize transactions</p>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                    </svg>
+                                    <h3 class="font-bold text-green-900">Dual Currency Support</h3>
+                                </div>
+                                <p class="text-sm text-gray-700">Seamlessly manage EUR, USD, and major cryptocurrencies in one platform</p>
+                            </div>
+                            <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                    <h3 class="font-bold text-purple-900">Team Collaboration</h3>
+                                </div>
+                                <p class="text-sm text-gray-700">Role-based permissions, spending limits, and activity auditing</p>
+                            </div>
+                            <div class="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                    </svg>
+                                    <h3 class="font-bold text-orange-900">Enterprise Compliance</h3>
+                                </div>
+                                <p class="text-sm text-gray-700">Full KYB verification, audit trails, and regulatory compliance</p>
+                            </div>
                         </div>
-                        <div class="flex items-start gap-2 mb-2">
-                            <svg class="w-4 h-4 text-green-700 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                            </svg>
-                            <p class="text-sm text-green-800 font-semibold">
-                                Secured by Magic.link
+                        <div class="bg-gradient-to-r from-blue-100 to-purple-100 p-4 rounded-lg">
+                            <p class="text-sm text-gray-800">
+                                <strong>In simple terms:</strong> Think of it as your company's financial command center where traditional banking meets the future of digital assets, with built-in safeguards to protect your business.
                             </p>
                         </div>
-                        <p class="text-xs text-green-700">✓ Encrypted in HSM infrastructure</p>
-                        <p class="text-xs text-green-700">✓ Multi-Party Computation (MPC)</p>
-                        <p class="text-xs text-green-700">✓ Alice accesses via email login</p>
-                        <p class="text-xs text-green-700 font-bold mt-2">
-                            Alice never sees her key (doesn't need to!)
-                        </p>
                     </div>
                 </div>
 
-                <!-- Signer 2 - Bob -->
-                <div class="border-4 border-blue-500 rounded-xl p-6 bg-blue-50">
-                    <div class="flex items-center gap-2 mb-4 pb-3 border-b-2 border-blue-300">
-                        <svg class="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        </svg>
-                        <h3 class="text-xl font-bold text-blue-900">SIGNER 2: Bob</h3>
-                    </div>
-                    
-                    <div class="bg-white rounded-lg p-4 mb-4 border-2 border-blue-300">
-                        <div class="flex items-center gap-2 mb-2">
-                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                            </svg>
-                            <p class="font-bold text-blue-900">Trustyfy Native Wallet</p>
-                        </div>
-                        <p class="text-xs text-gray-600 mb-2">(Magic.link)</p>
-                        <p class="text-sm text-gray-700 mb-2">bob@company.com</p>
-                        <div class="bg-blue-100 p-2 rounded text-xs font-mono break-all">
-                            0x5e6f...7a8b
-                        </div>
-                    </div>
+                <!-- 1.2 Main Components -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">1.2 Main Components: Bank Accounts and Smart Wallets</h2>
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <p class="text-gray-700 mb-6">Your Corporate Account consists of two interconnected financial systems:</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6 mb-8">
+                            <!-- Fiat Bank Accounts -->
+                            <div class="border-2 border-green-400 rounded-xl p-6 bg-green-50">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                    <h3 class="text-xl font-bold text-green-900">Fiat Bank Accounts</h3>
+                                </div>
+                                <p class="text-sm text-gray-700 mb-3">Traditional banking for EUR and USD</p>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-green-600 font-bold">•</span>
+                                        <span><strong>EUR accounts</strong> via OpenPayd (SEPA transfers)</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-green-600 font-bold">•</span>
+                                        <span><strong>USD accounts</strong> via Bridge (ACH, WIRE)</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-green-600 font-bold">•</span>
+                                        <span>IBAN and account numbers for receiving payments</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-green-600 font-bold">•</span>
+                                        <span>International transfers (SWIFT supported)</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-green-600 font-bold">•</span>
+                                        <span>Direct conversion to crypto via on-ramp</span>
+                                    </li>
+                                </ul>
+                            </div>
 
-                    <div class="bg-green-100 border-2 border-green-500 rounded-lg p-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                            </svg>
-                            <p class="font-bold text-green-900">Private Key Location</p>
+                            <!-- Smart Wallets -->
+                            <div class="border-2 border-blue-400 rounded-xl p-6 bg-blue-50">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                    </svg>
+                                    <h3 class="text-xl font-bold text-blue-900">Smart Wallets (Gnosis Safe)</h3>
+                                </div>
+                                <p class="text-sm text-gray-700 mb-3">Blockchain-based multi-signature wallets</p>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-600 font-bold">•</span>
+                                        <span>Hold cryptocurrencies (ETH, USDC, USDT, etc.)</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-600 font-bold">•</span>
+                                        <span><strong>Multi-chain support:</strong> Ethereum, Polygon, Base, etc.</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-600 font-bold">•</span>
+                                        <span>Built-in approval workflows (multisig)</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-600 font-bold">•</span>
+                                        <span>Swap, bridge, and send crypto instantly</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-600 font-bold">•</span>
+                                        <span>Direct conversion to fiat via off-ramp</span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="flex items-start gap-2 mb-2">
-                            <svg class="w-4 h-4 text-green-700 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                            </svg>
-                            <p class="text-sm text-green-800 font-semibold">
-                                Secured by Magic.link
+
+                        <div class="bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-400 rounded-lg p-6">
+                            <div class="flex items-center gap-2 mb-3">
+                                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                <h4 class="font-bold text-yellow-900">The Bridge Between Both Worlds</h4>
+                            </div>
+                            <p class="text-sm text-gray-700">
+                                The on-ramp/off-ramp feature connects your fiat accounts to your smart wallets, allowing you to convert EUR/USD to crypto and vice versa instantly. This means you can receive a client payment in EUR, convert it to USDC, and pay an international supplier—all within minutes.
                             </p>
                         </div>
-                        <p class="text-xs text-green-700">✓ Encrypted in HSM infrastructure</p>
-                        <p class="text-xs text-green-700">✓ Multi-Party Computation (MPC)</p>
-                        <p class="text-xs text-green-700">✓ Bob accesses via email login</p>
-                        <p class="text-xs text-green-700 font-bold mt-2">
-                            Bob never sees his key (doesn't need to!)
-                        </p>
                     </div>
                 </div>
 
-                <!-- Signer 3 - Charlie -->
-                <div class="border-4 border-blue-500 rounded-xl p-6 bg-blue-50">
-                    <div class="flex items-center gap-2 mb-4 pb-3 border-b-2 border-blue-300">
-                        <svg class="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        </svg>
-                        <h3 class="text-xl font-bold text-blue-900">SIGNER 3: Charlie</h3>
-                    </div>
-                    
-                    <div class="bg-white rounded-lg p-4 mb-4 border-2 border-blue-300">
-                        <div class="flex items-center gap-2 mb-2">
-                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                            </svg>
-                            <p class="font-bold text-blue-900">Trustyfy Native Wallet</p>
-                        </div>
-                        <p class="text-xs text-gray-600 mb-2">(Magic.link)</p>
-                        <p class="text-sm text-gray-700 mb-2">charlie@company.com</p>
-                        <div class="bg-blue-100 p-2 rounded text-xs font-mono break-all">
-                            0x9c0d...1e2f
-                        </div>
-                    </div>
+                <!-- 1.3 Team Roles -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">1.3 Team Roles and Permissions</h2>
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <p class="text-gray-700 mb-6">Trustyfy Corporate Accounts use a role-based access system to ensure proper segregation of duties:</p>
+                        
+                        <div class="space-y-4">
+                            <!-- Admin Role -->
+                            <div class="border-2 border-red-400 rounded-lg p-5 bg-red-50">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                    </svg>
+                                    <h3 class="text-lg font-bold text-red-900">Admin (Full Control)</h3>
+                                </div>
+                                <p class="text-sm text-gray-700 mb-3">The highest level of access, typically for company owners or C-level executives</p>
+                                <div class="grid md:grid-cols-2 gap-3 text-sm">
+                                    <div>
+                                        <p class="font-semibold text-red-800 mb-1">Can do:</p>
+                                        <ul class="space-y-1 text-gray-700">
+                                            <li>✓ Manage all bank accounts and wallets</li>
+                                            <li>✓ Invite/remove team members</li>
+                                            <li>✓ Assign roles and permissions</li>
+                                            <li>✓ Change multisig policies</li>
+                                            <li>✓ View all transactions and reports</li>
+                                            <li>✓ Configure spending limits</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-red-200">
+                                        <p class="font-semibold text-red-800 mb-1">Typical users:</p>
+                                        <p class="text-xs text-gray-600">CEO, CFO, Co-founders</p>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <div class="bg-green-100 border-2 border-green-500 rounded-lg p-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                            </svg>
-                            <p class="font-bold text-green-900">Private Key Location</p>
+                            <!-- Accountant Role -->
+                            <div class="border-2 border-blue-400 rounded-lg p-5 bg-blue-50">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <h3 class="text-lg font-bold text-blue-900">Accountant (Financial Oversight)</h3>
+                                </div>
+                                <p class="text-sm text-gray-700 mb-3">Read-only access for financial tracking and reporting</p>
+                                <div class="grid md:grid-cols-2 gap-3 text-sm">
+                                    <div>
+                                        <p class="font-semibold text-blue-800 mb-1">Can do:</p>
+                                        <ul class="space-y-1 text-gray-700">
+                                            <li>✓ View all balances and transactions</li>
+                                            <li>✓ Download reports and statements</li>
+                                            <li>✓ Access transaction history</li>
+                                            <li>✓ Monitor spending patterns</li>
+                                        </ul>
+                                        <p class="font-semibold text-blue-800 mb-1 mt-2">Cannot do:</p>
+                                        <ul class="space-y-1 text-gray-700">
+                                            <li>✗ Initiate or approve transactions</li>
+                                            <li>✗ Change any settings</li>
+                                            <li>✗ Invite or remove users</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-blue-200">
+                                        <p class="font-semibold text-blue-800 mb-1">Typical users:</p>
+                                        <p class="text-xs text-gray-600">Accountants, Financial Controllers, External auditors</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Member Role -->
+                            <div class="border-2 border-green-400 rounded-lg p-5 bg-green-50">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    <h3 class="text-lg font-bold text-green-900">Member (Limited Access)</h3>
+                                </div>
+                                <p class="text-sm text-gray-700 mb-3">Restricted access for specific wallets and spending limits</p>
+                                <div class="grid md:grid-cols-2 gap-3 text-sm">
+                                    <div>
+                                        <p class="font-semibold text-green-800 mb-1">Can do:</p>
+                                        <ul class="space-y-1 text-gray-700">
+                                            <li>✓ Access assigned wallets only</li>
+                                            <li>✓ Propose transactions (needs approval)</li>
+                                            <li>✓ View own transaction history</li>
+                                            <li>✓ Spend within assigned limits</li>
+                                        </ul>
+                                        <p class="font-semibold text-green-800 mb-1 mt-2">Cannot do:</p>
+                                        <ul class="space-y-1 text-gray-700">
+                                            <li>✗ Access other wallets</li>
+                                            <li>✗ Change settings</li>
+                                            <li>✗ See company-wide finances</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-green-200">
+                                        <p class="font-semibold text-green-800 mb-1">Typical users:</p>
+                                        <p class="text-xs text-gray-600">Department managers, Project leads, Team members with spending authority</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex items-start gap-2 mb-2">
-                            <svg class="w-4 h-4 text-green-700 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                            </svg>
-                            <p class="text-sm text-green-800 font-semibold">
-                                Secured by Magic.link
+
+                        <div class="mt-6 bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-300 rounded-lg p-5">
+                            <h4 class="font-bold text-purple-900 mb-2">💡 Best Practice</h4>
+                            <p class="text-sm text-gray-700">
+                                Start with fewer Admins (2-3) and assign most team members as Members with specific wallet access. This follows the principle of least privilege and reduces security risks while maintaining operational efficiency.
                             </p>
                         </div>
-                        <p class="text-xs text-green-700">✓ Encrypted in HSM infrastructure</p>
-                        <p class="text-xs text-green-700">✓ Multi-Party Computation (MPC)</p>
-                        <p class="text-xs text-green-700">✓ Charlie accesses via email login</p>
-                        <p class="text-xs text-green-700 font-bold mt-2">
-                            Charlie never sees his key (doesn't need to!)
-                        </p>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Arrow -->
-        <div class="flex justify-center mb-8">
-            <div class="text-center">
-                <div class="inline-block p-4 bg-gray-200 rounded-full mb-2">
-                    <svg class="w-8 h-8 text-gray-700 transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                    </svg>
-                </div>
-                <p class="text-sm font-bold text-gray-700">ALL SIGN TOWARDS</p>
-            </div>
-        </div>
+                <!-- 1.4 Operational Flow -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">1.4 Operational Flow Overview</h2>
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <p class="text-gray-700 mb-6">Understanding how money flows through your Corporate Account:</p>
+                        
+                        <div class="space-y-6">
+                            <!-- Flow Diagram -->
+                            <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border-2 border-blue-300">
+                                <h3 class="text-lg font-bold text-blue-900 mb-4 text-center">Typical Transaction Flow</h3>
+                                
+                                <div class="space-y-4">
+                                    <div class="flex items-center gap-4">
+                                        <div class="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">1</div>
+                                        <div class="bg-white rounded-lg p-4 flex-1 border border-blue-200">
+                                            <p class="font-semibold text-blue-900">Receive Payment</p>
+                                            <p class="text-sm text-gray-600">Client sends EUR to your IBAN or crypto to your wallet address</p>
+                                        </div>
+                                    </div>
 
-        <!-- The Digital Vault -->
-        <div class="border-4 border-orange-500 rounded-xl p-8 bg-gradient-to-br from-orange-50 to-yellow-50 mb-8">
-            <div class="flex items-center justify-center gap-3 mb-6">
-                <svg class="w-10 h-10 text-orange-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                </svg>
-                <h2 class="text-3xl font-bold text-orange-900">🏦 THE DIGITAL VAULT</h2>
-            </div>
-            <p class="text-center text-lg text-orange-800 mb-6">Trustyfy Corporate Wallet (Gnosis Safe)</p>
+                                    <div class="flex justify-center">
+                                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                                        </svg>
+                                    </div>
 
-            <div class="grid md:grid-cols-2 gap-6 mb-6">
-                <div class="bg-white rounded-lg p-6 border-2 border-orange-300">
-                    <h4 class="font-bold text-orange-900 mb-3 text-lg">📋 Configuration</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li class="flex items-start gap-2">
-                            <span class="text-green-600">✓</span>
-                            <span><strong>Authorized signers:</strong> 3 Native Wallets (Alice, Bob, Charlie)</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-green-600">✓</span>
-                            <span><strong>Threshold:</strong> 2 of 3 signatures required</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-green-600">✓</span>
-                            <span><strong>Network:</strong> Ethereum / Polygon / Base</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-green-600">✓</span>
-                            <span><strong>Type:</strong> Smart Contract (Pure Code)</span>
-                        </li>
-                    </ul>
-                </div>
+                                    <div class="flex items-center gap-4">
+                                        <div class="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">2</div>
+                                        <div class="bg-white rounded-lg p-4 flex-1 border border-blue-200">
+                                            <p class="font-semibold text-blue-900">Convert (Optional)</p>
+                                            <p class="text-sm text-gray-600">Use on-ramp to convert EUR to USDC, or off-ramp to convert crypto to USD</p>
+                                        </div>
+                                    </div>
 
-                <div class="bg-red-100 border-2 border-red-500 rounded-lg p-6">
-                    <div class="flex items-center gap-2 mb-3">
-                        <svg class="w-6 h-6 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                        </svg>
-                        <h4 class="font-bold text-red-900 text-lg">⚠️ CRITICAL</h4>
-                    </div>
-                    <p class="text-sm text-red-800 font-bold mb-2">
-                        This Trustyfy Corporate Wallet has NO private key
-                    </p>
-                    <p class="text-xs text-red-700 mb-2">
-                        It's a smart contract with RULES. Transactions execute when enough valid signatures are collected (2/3 threshold).
-                    </p>
-                    <p class="text-xs text-red-700 font-bold mb-3">
-                        This eliminates the risk of "losing the master key" - there is no such master key.
-                    </p>
-                    <div class="bg-red-200 border-2 border-red-600 rounded p-3 mt-3">
-                        <p class="text-xs text-red-900 font-bold mb-1">⚠️ MULTI-CHAIN ADDRESSES</p>
-                        <p class="text-xs text-red-800">
-                            The Trustyfy Corporate Wallet address is DIFFERENT on each blockchain (Ethereum, Polygon, Base, etc.). Always verify you're using the correct address for the specific chain.
-                        </p>
-                    </div>
-                </div>
-            </div>
+                                    <div class="flex justify-center">
+                                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                                        </svg>
+                                    </div>
 
-            <div class="bg-gradient-to-r from-emerald-100 to-emerald-50 border-2 border-emerald-500 rounded-lg p-6">
-                <div class="flex items-center gap-2 mb-3">
-                    <svg class="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                    </svg>
-                    <h4 class="font-bold text-emerald-900 text-lg">💰 THIS IS WHERE THE FUNDS LIVE</h4>
-                </div>
-                <p class="text-sm text-emerald-800 mb-2">
-                    <strong>Contract Address:</strong> 0xABC...DEF (example)
-                </p>
-                <p class="text-xs text-emerald-700 mb-3">
-                    All company tokens, ETH, USDC, USDT, etc. are custody on the blockchain at this Trustyfy Corporate Wallet address. Nobody can move funds without meeting the 2/3 signature requirement.
-                </p>
-                <div class="bg-emerald-200 rounded p-3 text-xs text-emerald-900">
-                    <strong>Example Balance:</strong> 50 ETH, 100,000 USDC, 5 WBTC
-                </div>
-            </div>
-        </div>
+                                    <div class="flex items-center gap-4">
+                                        <div class="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">3</div>
+                                        <div class="bg-white rounded-lg p-4 flex-1 border border-blue-200">
+                                            <p class="font-semibold text-blue-900">Propose Transaction</p>
+                                            <p class="text-sm text-gray-600">Admin or Member initiates payment to vendor or employee</p>
+                                        </div>
+                                    </div>
 
-        <!-- Page Break for PDF -->
-        <div class="page-break"></div>
+                                    <div class="flex justify-center">
+                                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                                        </svg>
+                                    </div>
 
-        <!-- Transaction Flow -->
-        <div class="bg-gradient-to-r from-indigo-100 to-indigo-50 border-4 border-indigo-500 rounded-xl p-8 mb-8">
-            <h2 class="text-2xl font-bold text-indigo-900 mb-4 text-center">
-                📖 TRANSACTION FLOW: The Complete Story
-            </h2>
-            <p class="text-center text-indigo-700 mb-6 font-semibold">
-                Scenario: Paying a 5,000 USDC invoice
-            </p>
-            
-            <div class="space-y-4">
-                <div class="flex items-start gap-4 bg-white rounded-lg p-5 border-2 border-indigo-300">
-                    <div class="bg-indigo-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg flex-shrink-0">1</div>
-                    <div>
-                        <p class="font-bold text-indigo-900 mb-2 text-lg">📝 The Proposal (Alice)</p>
-                        <p class="text-sm text-gray-700 mb-2">Alice logs into Trustyfy and proposes to pay 5,000 USDC to vendor address: 0x789a...bcde</p>
-                        <div class="bg-indigo-50 border-l-4 border-indigo-400 p-3 mt-2">
-                            <p class="text-xs text-indigo-800 mb-1"><strong>Behind the scenes:</strong></p>
-                            <p class="text-xs text-indigo-700">• Magic.link verifies Alice's identity (via email)</p>
-                            <p class="text-xs text-indigo-700">• Uses Alice's private key to digitally sign the proposal on blockchain</p>
-                            <p class="text-xs text-indigo-700 font-bold mt-1">• Status: The Vault says "I have 1 signature of 2 needed. Funds DON'T move yet."</p>
+                                    <div class="flex items-center gap-4">
+                                        <div class="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">4</div>
+                                        <div class="bg-white rounded-lg p-4 flex-1 border border-blue-200">
+                                            <p class="font-semibold text-blue-900">Multi-signature Approval</p>
+                                            <p class="text-sm text-gray-600">Required signers review and approve the transaction (e.g., 2 of 3)</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex justify-center">
+                                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                                        </svg>
+                                    </div>
+
+                                    <div class="flex items-center gap-4">
+                                        <div class="bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">✓</div>
+                                        <div class="bg-green-100 rounded-lg p-4 flex-1 border-2 border-green-500">
+                                            <p class="font-semibold text-green-900">Payment Executed</p>
+                                            <p class="text-sm text-gray-700">Funds are transferred automatically once approval threshold is met</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Key Benefits -->
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div class="bg-green-50 border border-green-300 rounded-lg p-4">
+                                    <div class="text-center mb-2">
+                                        <span class="text-3xl">⚡</span>
+                                    </div>
+                                    <h4 class="font-bold text-green-900 text-center mb-2">Speed</h4>
+                                    <p class="text-sm text-gray-700 text-center">Crypto transactions settle in minutes, not days</p>
+                                </div>
+                                <div class="bg-blue-50 border border-blue-300 rounded-lg p-4">
+                                    <div class="text-center mb-2">
+                                        <span class="text-3xl">🔒</span>
+                                    </div>
+                                    <h4 class="font-bold text-blue-900 text-center mb-2">Security</h4>
+                                    <p class="text-sm text-gray-700 text-center">Multi-signature prevents unauthorized transactions</p>
+                                </div>
+                                <div class="bg-purple-50 border border-purple-300 rounded-lg p-4">
+                                    <div class="text-center mb-2">
+                                        <span class="text-3xl">📊</span>
+                                    </div>
+                                    <h4 class="font-bold text-purple-900 text-center mb-2">Transparency</h4>
+                                    <p class="text-sm text-gray-700 text-center">Every transaction is tracked and auditable</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-5">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <h4 class="font-bold text-yellow-900">Important Note</h4>
+                                </div>
+                                <p class="text-sm text-gray-700">
+                                    The operational flow adapts to your business needs. You can customize approval policies, spending limits, and wallet configurations to match your internal processes. The platform is flexible enough for a 3-person startup or a 100-person company.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="flex items-start gap-4 bg-white rounded-lg p-5 border-2 border-indigo-300">
-                    <div class="bg-indigo-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg flex-shrink-0">2</div>
-                    <div>
-                        <p class="font-bold text-indigo-900 mb-2 text-lg">🔔 The Notification</p>
-                        <p class="text-sm text-gray-700">Bob receives an alert on his Trustyfy dashboard:</p>
-                        <div class="bg-yellow-50 border-2 border-yellow-400 rounded p-3 mt-2">
-                            <p class="text-sm text-yellow-900 font-semibold">"Alice wants to move 5,000 USDC. Do you approve?"</p>
-                        </div>
-                        <p class="text-xs text-gray-600 mt-2 italic">Charlie also receives the notification but he's on vacation</p>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-4 bg-white rounded-lg p-5 border-2 border-indigo-300">
-                    <div class="bg-indigo-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg flex-shrink-0">3</div>
-                    <div>
-                        <p class="font-bold text-indigo-900 mb-2 text-lg">✅ The Approval (Bob)</p>
-                        <p class="text-sm text-gray-700 mb-2">Bob reviews the proposed payment. Everything looks correct. He clicks "Approve".</p>
-                        <div class="bg-indigo-50 border-l-4 border-indigo-400 p-3 mt-2">
-                            <p class="text-xs text-indigo-800 mb-1"><strong>Behind the scenes:</strong></p>
-                            <p class="text-xs text-indigo-700">• Magic.link verifies Bob's identity</p>
-                            <p class="text-xs text-indigo-700">• Uses Bob's private key to sign</p>
-                            <p class="text-xs text-indigo-700 font-bold mt-1">• Status: The Vault says "I have 2 signatures of 2 needed. GREEN LIGHT! ✅"</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-4 bg-white rounded-lg p-5 border-2 border-indigo-300">
-                    <div class="bg-indigo-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg flex-shrink-0">4</div>
-                    <div>
-                        <p class="font-bold text-indigo-900 mb-2 text-lg">⚡ The Execution</p>
-                        <p class="text-sm text-gray-700 mb-2">Since the rule (2/3) was met, the Gnosis Safe Smart Contract automatically executes the transaction.</p>
-                        <div class="bg-green-50 border-2 border-green-400 rounded p-3 mt-2">
-                            <p class="text-sm text-green-800"><strong>Result:</strong> 5,000 USDC moved from Trustyfy Corporate Wallet to vendor address 0x789a...bcde</p>
-                            <p class="text-xs text-green-700 mt-1"><strong>Note:</strong> Charlie's signature wasn't needed. The money moved securely because two authorized signers approved it.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-4 bg-green-100 rounded-lg p-5 border-2 border-green-500">
-                    <div class="bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg flex-shrink-0">✓</div>
-                    <div>
-                        <p class="font-bold text-green-900 mb-2 text-lg">🎉 Transaction Complete</p>
-                        <p class="text-sm text-green-800">The funds have left the Smart Contract. The transaction is immutable and verifiable on the blockchain. Payment complete. Business continues.</p>
-                    </div>
+        <!-- Section 2: Creating an Account (Placeholder) -->
+        <div id="creation" class="section-content">
+            <div class="max-w-5xl">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6 pb-4 border-b-4 border-blue-600">
+                    2. Creating a Corporate Account
+                </h1>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <p class="text-lg text-gray-700">Content coming soon...</p>
                 </div>
             </div>
         </div>
 
-        <!-- The Three Layers -->
-        <div class="bg-gradient-to-r from-cyan-100 to-cyan-50 border-4 border-cyan-500 rounded-xl p-8 mb-8">
-            <h2 class="text-2xl font-bold text-cyan-900 mb-6 text-center">
-                🎯 The Three Layers (Simple Explanation)
-            </h2>
-            
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-white rounded-lg p-6 border-2 border-cyan-300">
-                    <div class="flex items-center gap-2 mb-3">
-                        <svg class="w-6 h-6 text-cyan-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                        <h4 class="font-bold text-cyan-900 text-lg">Trustyfy</h4>
-                    </div>
-                    <p class="text-sm text-gray-700 mb-2 font-semibold">The Interface</p>
-                    <p class="text-xs text-gray-600">
-                        Like the touchscreen on an ATM. Beautiful, easy to use, but doesn't hold the money. If Trustyfy disappears tomorrow, your funds remain safe on the blockchain.
-                    </p>
-                </div>
-
-                <div class="bg-white rounded-lg p-6 border-2 border-cyan-300">
-                    <div class="flex items-center gap-2 mb-3">
-                        <svg class="w-6 h-6 text-cyan-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                        </svg>
-                        <h4 class="font-bold text-cyan-900 text-lg">Magic.link</h4>
-                    </div>
-                    <p class="text-sm text-gray-700 mb-2 font-semibold">The Invisible Keychain</p>
-                    <p class="text-xs text-gray-600">
-                        Allows signing without seeing complicated keys. Login with email, Magic handles the cryptography. Your keys never touch Trustyfy servers.
-                    </p>
-                </div>
-
-                <div class="bg-white rounded-lg p-6 border-2 border-cyan-300">
-                    <div class="flex items-center gap-2 mb-3">
-                        <svg class="w-6 h-6 text-cyan-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                        </svg>
-                        <h4 class="font-bold text-cyan-900 text-lg">Gnosis Safe</h4>
-                    </div>
-                    <p class="text-sm text-gray-700 mb-2 font-semibold">The Vault</p>
-                    <p class="text-xs text-gray-600">
-                        Where the money lives. It's not a person, it's a contract with rules. Trusted by major crypto institutions holding billions.
-                    </p>
+        <!-- Additional sections (placeholders for now) -->
+        <div id="kyb" class="section-content">
+            <div class="max-w-5xl">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6 pb-4 border-b-4 border-blue-600">
+                    3. KYB Onboarding
+                </h1>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <p class="text-lg text-gray-700">Content coming soon...</p>
                 </div>
             </div>
         </div>
 
-        <!-- Killer FAQs -->
-        <div class="bg-gradient-to-r from-amber-100 to-amber-50 border-4 border-amber-500 rounded-xl p-8 mb-8">
-            <h2 class="text-2xl font-bold text-amber-900 mb-6 text-center">
-                💡 KILLER FAQs (Objection Handling)
-            </h2>
-            
-            <div class="space-y-4">
-                <div class="bg-white rounded-lg p-5 border-2 border-amber-300">
-                    <p class="font-bold text-amber-900 mb-2 text-lg">Q: Where are the company's private keys?</p>
-                    <div class="bg-amber-50 p-3 rounded">
-                        <p class="text-sm text-gray-800 mb-2"><strong>A:</strong> The company (the Gnosis Safe) DOES NOT have a private key. It is a smart contract, pure code.</p>
-                        <p class="text-xs text-gray-700">It only obeys the keys of the signers (Alice, Bob, Charlie). This eliminates the risk of "losing the company master key." There is no such master key.</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg p-5 border-2 border-amber-300">
-                    <p class="font-bold text-amber-900 mb-2 text-lg">Q: And where are Alice, Bob, and Charlie's keys?</p>
-                    <div class="bg-amber-50 p-3 rounded">
-                        <p class="text-sm text-gray-800 mb-2"><strong>A:</strong> They are secured by Magic.link using HSM (Hardware Security Modules) and Multi-Party Computation.</p>
-                        <p class="text-xs text-gray-700 mb-2"><strong>Translation:</strong> The keys are fragmented and encrypted on ultra-secure servers.</p>
-                        <p class="text-xs text-gray-700">Alice only accesses her "permission to use" by logging into Trustyfy. Alice never sees her private key (nor does she need to), which prevents it from being stolen via phishing.</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg p-5 border-2 border-amber-300">
-                    <p class="font-bold text-amber-900 mb-2 text-lg">Q: If Trustyfy gets hacked, do they take my money?</p>
-                    <div class="bg-amber-50 p-3 rounded">
-                        <p class="text-sm text-gray-800 mb-2"><strong>A:</strong> No. Trustyfy is just the window (the interface).</p>
-                        <p class="text-xs text-gray-700 mb-2">If Trustyfy disappears tomorrow, your money remains on the blockchain (in the Gnosis Safe).</p>
-                        <p class="text-xs text-gray-700 font-bold">You could interact with that Gnosis Safe using another interface (like the official Gnosis app) using the same Magic.link credentials. Trustyfy does not have custody of your funds.</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg p-5 border-2 border-amber-300">
-                    <p class="font-bold text-amber-900 mb-2 text-lg">Q: What happens if Bob loses access to his email?</p>
-                    <div class="bg-amber-50 p-3 rounded">
-                        <p class="text-sm text-gray-800 mb-2"><strong>A:</strong> Since the policy is 2/3, Alice and Charlie can vote to replace Bob with a new signer (David).</p>
-                        <p class="text-xs text-gray-700">The Vault allows changing the locks without having to move the funds to a new account. Funds stay exactly where they are.</p>
-                    </div>
+        <div id="wallets" class="section-content">
+            <div class="max-w-5xl">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6 pb-4 border-b-4 border-blue-600">
+                    4. Corporate Smart Wallets
+                </h1>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <p class="text-lg text-gray-700">Content coming soon...</p>
                 </div>
             </div>
         </div>
 
-        <!-- Elevator Pitch -->
-        <div class="bg-gradient-to-r from-rose-100 to-rose-50 border-4 border-rose-500 rounded-xl p-8">
-            <h2 class="text-2xl font-bold text-rose-900 mb-4 text-center">
-                🎤 The Elevator Pitch
-            </h2>
-            <div class="bg-white rounded-lg p-6 border-2 border-rose-300">
-                <p class="text-lg text-gray-800 mb-4 leading-relaxed">
-                    "Trustyfy combines the <strong>institutional-grade security</strong> of Gnosis Safe (where major crypto banks hold billions) with the <strong>ease of use</strong> of Magic.link."
-                </p>
-                <p class="text-lg text-gray-800 leading-relaxed">
-                    "We provide the <strong>steering wheel and pedals</strong> (the easy interface), but the <strong>engine is armored</strong>, and the <strong>keys are held by you</strong>, distributed so that no one can steal the car alone."
-                </p>
+        <div id="multisig" class="section-content">
+            <div class="max-w-5xl">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6 pb-4 border-b-4 border-blue-600">
+                    5. Multisig and Approval Policies
+                </h1>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <p class="text-lg text-gray-700">Content coming soon...</p>
+                </div>
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="mt-8 pt-6 border-t-2 border-gray-300 text-center text-sm text-gray-600">
-            <p>© Trustyfy - Corporate Wallet Architecture Documentation</p>
-            <p class="mt-1">For internal use by Sales & Support teams</p>
+        <div id="fiat" class="section-content">
+            <div class="max-w-5xl">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6 pb-4 border-b-4 border-blue-600">
+                    6. Fiat Bank Accounts
+                </h1>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <p class="text-lg text-gray-700">Content coming soon...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="ramps" class="section-content">
+            <div class="max-w-5xl">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6 pb-4 border-b-4 border-blue-600">
+                    7. On-ramp and Off-ramp
+                </h1>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <p class="text-lg text-gray-700">Content coming soon...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="team" class="section-content">
+            <div class="max-w-5xl">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6 pb-4 border-b-4 border-blue-600">
+                    8. Team Management
+                </h1>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <p class="text-lg text-gray-700">Content coming soon...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="operations" class="section-content">
+            <div class="max-w-5xl">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6 pb-4 border-b-4 border-blue-600">
+                    9. Daily Corporate Operations
+                </h1>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <p class="text-lg text-gray-700">Content coming soon...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="advanced" class="section-content">
+            <div class="max-w-5xl">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6 pb-4 border-b-4 border-blue-600">
+                    10. Advanced Use Cases
+                </h1>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <p class="text-lg text-gray-700">Content coming soon...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="faq" class="section-content">
+            <div class="max-w-5xl">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6 pb-4 border-b-4 border-blue-600">
+                    11. FAQ
+                </h1>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <p class="text-lg text-gray-700">Content coming soon...</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Auto-print dialog on load (optional - comment out if not needed)
-        // window.onload = function() { window.print(); }
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all menu items
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked menu item
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
     </script>
 </body>
 </html>
